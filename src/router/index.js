@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import {useAuthUserStore} from "../stores/user";
+import {useApiStore} from "../stores/api";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,11 +22,28 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue')
     },
     {
+      path: '/account',
+      name: 'resumes',
+      component: () => import('../views/AccountView.vue')
+    },
+    {
+      path: '/resumes',
+      name: 'account',
+      component: () => import('../views/ResumesView.vue')
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: 'not found',
       component: () => import('../views/NotFoundView.vue')
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const apiStore = useApiStore()
+  if ((to.path === '/account' || to.path === '/resumes') && !apiStore.jwt) next({ path: '/auth' })
+  else if ((to.path === '/auth' || to.path === '/signup') && apiStore.jwt) next({ path: '/account' })
+  else next()
 })
 
 export default router

@@ -10,7 +10,6 @@ export const useAuthLoginStore = defineStore('auth/login', {
     }),
     actions: {
         logIn (email, password) {
-            console.log("login")
             this.$reset()
             const apiStore = useApiStore()
 
@@ -25,7 +24,6 @@ export const useAuthLoginStore = defineStore('auth/login', {
             })
                 .then(res => {
                     this.loading = false
-                    console.log(res)
 
                     if (res && res.status === 200) {
                         return res.text()
@@ -40,18 +38,16 @@ export const useAuthLoginStore = defineStore('auth/login', {
                     }
                 })
                 .then(data => {
-                    console.log(data)
                     if (data) {
                         apiStore.refreshToken(data)
 
                         const authUserStore = useAuthUserStore()
                         authUserStore.getUserInfo()
 
-                        this.router.push({path: '/'})
+                        this.router.push({path: '/resumes'})
                     }
                 })
                 .catch(err => {
-                    console.log(err)
                     this.loading = false
                     this.internalError = err
                     this.error = "No connection..."

@@ -32,8 +32,6 @@ export const useAuthUserStore = defineStore('auth/user', {
             if (this.loggedIn)
                 return;
 
-            console.log("myself")
-
             const apiStore = useApiStore()
 
             if (apiStore.jwt)
@@ -46,21 +44,19 @@ export const useAuthUserStore = defineStore('auth/user', {
                     },
                 })
                     .then(res => {
-                        console.log(res)
                         if (res && res.status === 200) {
                             return res.json()
                         }
                         else if (res && res.status === 401) {
                             this.logOut()
+                            return;
                         }
                     })
                     .then(data => {
-                        console.log(data)
                         if (data)
                             this.updateUser(data)
                     })
                     .catch(err => {
-                        console.error(err)
                         this.internalError = err
                     })
             }

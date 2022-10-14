@@ -10,7 +10,6 @@ export const useAuthRegisterStore = defineStore('auth/register', {
     }),
     actions: {
         register (email, password, repeatPassword) {
-            console.log("register")
             this.$reset();
 
             if (password !== repeatPassword) {
@@ -31,7 +30,6 @@ export const useAuthRegisterStore = defineStore('auth/register', {
             })
                 .then(res => {
                     this.loading = false
-                    console.log(res)
 
                     if (res && res.status === 200) {
                         return res.text()
@@ -46,18 +44,16 @@ export const useAuthRegisterStore = defineStore('auth/register', {
                     }
                 })
                 .then(data => {
-                    console.log(data)
                     if (data) {
                         apiStore.refreshToken(data)
 
                         const authUserStore = useAuthUserStore()
                         authUserStore.getUserInfo()
 
-                        this.router.push({path: '/'})
+                        this.router.push({path: '/resumes'})
                     }
                 })
                 .catch(err => {
-                    console.log(err)
                     this.loading = false
                     this.internalError = err
                     this.error = "No connection..."

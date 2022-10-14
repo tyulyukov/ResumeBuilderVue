@@ -63,7 +63,7 @@ export default defineComponent({
 
               <div class="col-4">
                 <button v-if="!authLoginStore.$state.loading" :disabled="email === '' || password === ''" @click="logIn" class="btn btn-primary btn-submit">Sign in</button>
-                <div v-else class="spinner-border" style="margin: 1.75rem 0;"></div>
+                <div v-else class="spinner-border"></div>
               </div>
             </div>
           </form>

@@ -1,51 +1,64 @@
 <script>
 import { defineComponent } from "vue";
 import { useAuthUserStore } from "../stores/user";
+import {useResumeStore} from "../stores/resumes";
+import ResumeCard from "../components/ResumeCard.vue";
+import AddNewResumeCard from "../components/AddNewResumeCard.vue";
 
 export default defineComponent({
+  components: {AddNewResumeCard, ResumeCard},
   setup() {
     const authUserStore = useAuthUserStore()
+    const resumeStore = useResumeStore()
 
     return {
-      authUserStore
+      authUserStore,
+      resumeStore
     }
   },
   mounted() {
     this.authUserStore.getUserInfo()
+    this.resumeStore.getUserResumes()
   }
 })
 </script>
 
 <template>
-  <div class="box-shadow d-flex vh-100 text-center text-bg-dark">
+  <div class="box-shadow d-flex h-100 text-center text-bg-dark" style="min-height: 100vh">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="mb-auto">
         <div>
           <h3 class="float-md-start mb-0">Resume Builder</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
-            <RouterLink class="nav-link fw-bold py-1 px-0 active" aria-current="page" to="/">Home</RouterLink>
-            <RouterLink class="nav-link fw-bold py-1 px-0" to="/resumes">Resumes</RouterLink>
+            <RouterLink class="nav-link fw-bold py-1 px-0" aria-current="page" to="/">Home</RouterLink>
+            <RouterLink class="nav-link fw-bold py-1 px-0 active" to="/resumes">Resumes</RouterLink>
             <RouterLink class="nav-link fw-bold py-1 px-0" to="/account">Account</RouterLink>
           </nav>
         </div>
       </header>
 
-      <main class="px-3">
-        <h1>Use the best resume maker.</h1>
-        <p class="lead">Getting that dream job can seem like an impossible task. We’re here to change that. Give yourself a real advantage with the best online resume maker: created by experts, improved by data, trusted by millions of professionals.</p>
-        <p class="lead">
-          <RouterLink to="/resumes" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Get started</RouterLink>
-        </p>
-      </main>
+      <main class="mt-5 px-3 d-block">
+        <h1>Resumes</h1>
 
-      <footer class="mt-auto text-white-50">
-        <p>All rights reserved. <a href="https://github.com/tyulyukov/ResumeBuilderVue" class="text-white">Resume Builder</a>, by <a href="https://github.com/tyulyukov" class="text-white">@tyulyukov</a>.</p>
-      </footer>
+        <div v-if="!this.resumeStore.loading">
+          <div v-if="this.resumeStore.resumes">
+            <p class="lead">Resumes: {{ this.resumeStore.resumes.length }}</p>
+
+            <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-3 g-4" style="max-height: 100%; overflow: auto">
+              <ResumeCard v-for="resume in this.resumeStore.resumes"
+                          :resume="resume" />
+
+              <AddNewResumeCard />
+            </div>
+          </div>
+        </div>
+        <div v-else class="spinner-border"></div>
+      </main>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 .btn-secondary,
 .btn-secondary:hover,
 .btn-secondary:focus {
@@ -81,4 +94,7 @@ export default defineComponent({
   border-bottom-color: #fff;
 }
 
+.card {
+  cursor: pointer;
+}
 </style>

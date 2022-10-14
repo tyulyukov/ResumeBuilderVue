@@ -23,18 +23,23 @@ export default defineComponent({
         <div>
           <h3 class="float-md-start mb-0">Resume Builder</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
-            <RouterLink class="nav-link fw-bold py-1 px-0 active" aria-current="page" to="/">Home</RouterLink>
+            <RouterLink class="nav-link fw-bold py-1 px-0" aria-current="page" to="/">Home</RouterLink>
             <RouterLink class="nav-link fw-bold py-1 px-0" to="/resumes">Resumes</RouterLink>
-            <RouterLink class="nav-link fw-bold py-1 px-0" to="/account">Account</RouterLink>
+            <RouterLink class="nav-link fw-bold py-1 px-0 active" to="/account">Account</RouterLink>
           </nav>
         </div>
       </header>
 
       <main class="px-3">
-        <h1>Use the best resume maker.</h1>
-        <p class="lead">Getting that dream job can seem like an impossible task. We’re here to change that. Give yourself a real advantage with the best online resume maker: created by experts, improved by data, trusted by millions of professionals.</p>
+        <h1>Account</h1>
+        <div v-if="this.authUserStore.id">
+          <p class="lead">Email: {{ this.authUserStore.email }}</p>
+          <p class="lead">Registration date: {{ (new Date(this.authUserStore.createdAt)).toLocaleString() }}</p>
+        </div>
+        <div v-else class="spinner-border"></div>
+
         <p class="lead">
-          <RouterLink to="/resumes" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Get started</RouterLink>
+          <button @click="this.authUserStore.logOut()" class="btn btn-lg btn-danger fw-bold border-white bg-danger">Log Out</button>
         </p>
       </main>
 
