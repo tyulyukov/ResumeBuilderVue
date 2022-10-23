@@ -96,5 +96,12 @@ export default defineComponent({
 
 .card {
   cursor: pointer;
+  overflow: hidden;
+}
+
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
